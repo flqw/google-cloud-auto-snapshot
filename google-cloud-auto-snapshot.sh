@@ -8,7 +8,7 @@ fi
 # Author: Alan Fuller, Fullworks
 # loop through all disks within this project  and create a snapshot
 gcloud compute disks list --filter="labels.backup=true" --format='value(name,zone)'| while read -r DISK_NAME ZONE; do
-  gcloud compute snapshots create autogcs-"${DISK_NAME:0:31}"-"$(date '+%Y-%m-%d-%s')" --source-disk="${DISK_NAME}" --source-disk-zone="${ZONE}" --snapshot-type="${SNAPSHOT_TYPE:-ARCHIVE}"
+  gcloud compute snapshots create autogcs-"${DISK_NAME:0:31}"-"$(date '+%Y-%m-%d-%s')" --source-disk="${DISK_NAME}" --source-disk-zone="${ZONE}" --snapshot-type="${SNAPSHOT_TYPE:-ARCHIVE}" ${STORAGE_LOCATION:+--storage-location="${STORAGE_LOCATION}"}
 done
 #
 # snapshots are incremental and dont need to be deleted, deleting snapshots will merge snapshots, so deleting doesn't loose anything
